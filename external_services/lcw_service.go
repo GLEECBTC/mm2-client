@@ -124,7 +124,7 @@ func LcwRetrieveUSDValIfSupported(coin string) (string, string, string) {
 		val, ok := LcwPriceRegistry.Load(cfg.LcwId)
 		if ok {
 			resp := val.(LcwAnswer)
-			valStr = fmt.Sprintf("%f", resp.Rate)
+			valStr = fmt.Sprintf("%.10f", resp.Rate)
 		}
 		return valStr, dateStr, "livecoinwatch"
 	}
@@ -145,7 +145,7 @@ func LcwGetTotalVolume(coin string) (string, string, string) {
 		val, ok := LcwPriceRegistry.Load(cfg.LcwId)
 		if ok {
 			resp := val.(LcwAnswer)
-			totalVolumeStr = fmt.Sprintf("%f", resp.Volume)
+			totalVolumeStr = fmt.Sprintf("%.10f", resp.Volume)
 		}
 		return totalVolumeStr, dateStr, "livecoinwatch"
 	}
@@ -159,7 +159,7 @@ func LcwGetChange24h(coin string) (string, string, string) {
 		val, ok := LcwPriceRegistry.Load(cfg.LcwId)
 		if ok {
 			resp := val.(LcwAnswer)
-			changePercent24h = fmt.Sprintf("%f", resp.Delta.Day)
+			changePercent24h = fmt.Sprintf("%.10f", resp.Delta.Day)
 		}
 		return changePercent24h, dateStr, "livecoinwatch"
 	}

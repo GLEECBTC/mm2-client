@@ -8,10 +8,6 @@ import (
 func LaunchPriceServices() {
 	glg.Info("Starting binance websocket service")
 	go StartBinanceWebsocketService()
-	if constants.GNomicsApiKey != "" {
-		glg.Info("Starting nomics price service")
-		go StartNomicsService()
-	}
 	glg.Info("Start forex service")
 	go StartForexService()
 	glg.Info("Starting coingecko price service")

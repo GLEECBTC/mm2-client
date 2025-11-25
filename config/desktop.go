@@ -33,7 +33,6 @@ type DesktopCFG struct {
 	AliasTicker        *string        `json:"alias_ticker,omitempty"`
 	CoinpaprikaID      string         `json:"coinpaprika_id"`
 	CoingeckoID        string         `json:"coingecko_id"`
-	NomicsId           *string        `json:"nomics_id,omitempty"`
 	LcwId              string         `json:"livecoinwatch_id"`
 	ForexId            *string        `json:"forex_id,omitempty"`	
 	Electrum           []ElectrumData `json:"electrum,omitempty"`

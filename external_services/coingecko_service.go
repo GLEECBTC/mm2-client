@@ -106,7 +106,7 @@ func StartCoingeckoService() {
 	for {
 		if resp := processCoingecko(); resp != nil {
 			glg.Info("Coingecko request successfully processed")
-			for _, cur := range *resp {
+			for _, cur := range *resp {			
 				CoingeckoPriceRegistry.Store(cur.Id, cur)
 			}
 		} else {
@@ -123,7 +123,7 @@ func CoingeckoRetrieveUSDValIfSupported(coin string) (string, string, string) {
 		val, ok := CoingeckoPriceRegistry.Load(cfg.CoingeckoID)
 		if ok {
 			resp := val.(CoingeckoAnswer)
-			valStr = fmt.Sprintf("%f", resp.CurrentPrice)
+			valStr = fmt.Sprintf("%.10f", resp.CurrentPrice)
 			dateStr = resp.LastUpdated
 		}
 		return valStr, dateStr, "coingecko"
@@ -151,7 +151,7 @@ func CoingeckoGetTotalVolume(coin string) (string, string, string) {
 		val, ok := CoingeckoPriceRegistry.Load(cfg.CoingeckoID)
 		if ok {
 			resp := val.(CoingeckoAnswer)
-			totalVolumeStr = fmt.Sprintf("%f", resp.TotalVolume)
+			totalVolumeStr = fmt.Sprintf("%.10f", resp.TotalVolume)
 			dateStr = resp.LastUpdated
 		}
 		return totalVolumeStr, dateStr, "coingecko"

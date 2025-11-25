@@ -19,11 +19,6 @@ func RetrieveUSDValIfSupported(coin string, expirePriceValidity int) (string, st
 		}
 	}
 
-	//! Nomics
-	if val == "0" || (expirePriceValidity > 0 && elapsed > expirePriceValidityF) {
-		val, date, provider = NomicsRetrieveUSDValIfSupported(coin)
-		elapsed = helpers.DateToTimeElapsed(date)
-	}
 
 	//! Gecko
 	if val == "0" || (expirePriceValidity > 0 && elapsed > expirePriceValidityF) {
@@ -56,11 +51,6 @@ func RetrieveUSDValIfSupported(coin string, expirePriceValidity int) (string, st
 func RetrieveCEXRatesFromPair(base string, rel string) (string, bool, string, string) {
 	//! Binance
 	val, calculated, date, provider := BinanceRetrieveCEXRatesFromPair(base, rel)
-
-	//! Nomics
-	if val == "0" {
-		val, calculated, date, provider = NomicsRetrieveCEXRatesFromPair(base, rel)
-	}
 
 	//! LWC
 	if val == "0" {
@@ -110,9 +100,6 @@ func RetrieveSparkline7D(coin string) (*[]float64, string, string) {
 
 func RetrievePercentChange24h(coin string) (string, string, string) {
 	_, date, change24h, provider := BinanceRetrieveUSDValIfSupported(coin)
-	if change24h == "0" {
-		change24h, date, provider = NomicsGetChange24h(coin)
-	}
 
 	if change24h == "0" {
 		change24h, date, provider = CoingeckoGetChange24h(coin)

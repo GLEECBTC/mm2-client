@@ -111,7 +111,7 @@ func CoinpaprikaRetrieveUSDValIfSupported(coin string) (string, string, string) 
 	dateStr := helpers.GetDateFromTimestampStandard(time.Now().UnixNano())
 	if ok {
 		resp := val.(CoinpaprikaAnswer)
-		valStr = fmt.Sprintf("%f", resp.Quotes.USD.Price)
+		valStr = fmt.Sprintf("%.10f", resp.Quotes.USD.Price)
 		dateStr = resp.LastUpdated
 	}
 	return valStr, dateStr, "coinpaprika"
@@ -137,7 +137,7 @@ func CoinpaprikaTotalVolume(coin string) (string, string, string) {
 	dateStr := helpers.GetDateFromTimestampStandard(time.Now().UnixNano())
 	if ok {
 		resp := val.(CoinpaprikaAnswer)
-		totalVolumeStr = fmt.Sprintf("%f", resp.Quotes.USD.Volume24H)
+		totalVolumeStr = fmt.Sprintf("%.10f", resp.Quotes.USD.Volume24H)
 		dateStr = resp.LastUpdated
 	}
 	return totalVolumeStr, dateStr, "coinpaprika"

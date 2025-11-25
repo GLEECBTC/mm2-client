@@ -69,7 +69,7 @@ func ForexRetrieveUSDValIfSupported(coin string) (string, string, string) {
 		if ok {
 			resp := val.(*ForexAnswer)
 			if price, priceOk := resp.Rates[*cfg.ForexId]; priceOk {
-				valStr = fmt.Sprintf("%f", 1.0/price)
+				valStr = fmt.Sprintf("%.10f", 1.0/price)
 				dateStr = helpers.GetDateFromTimestampStandardSeconds(resp.Timestamp)
 			} else {
 				return valStr, dateStr, "unknown"

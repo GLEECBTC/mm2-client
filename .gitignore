@@ -1,5 +1,6 @@
 # Build and config files
 mm2_tools_server_bin
+prices_komodo_earth
 coins_config.json
 
 # Binaries for programs and plugins
@@ -24,3 +25,6 @@ cmd/mm2_cli_wasm/data/js
 cmd/mm2_cli_wasm/data/script.js
 cmd/mm2_cli_wasm/data/wasm_exec.js
 cmd/mm2_cli_wasm/data/static/assets/mm2_market_maker.json
+coins_config.json.bk
+coins.*
+coins
