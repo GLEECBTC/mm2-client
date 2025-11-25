@@ -1,31 +1,43 @@
 # mm2-client
-my own mm2 client / tooling
 
-Future tasks:
+Custom mm2 (AtomicDEX) tooling that bundles:
+
+- an interactive CLI to drive local mm2 nodes,
+- a reusable HTTP server that can start/stop market maker bots, and
+- a price aggregation service that feeds on Binance, Coingecko, CoinPaprika, etc.
+
+Use it to bootstrap simple market-making strategies, integrate the server into
+desktop or mobile apps, or operate a standalone price oracle.
+
+---
+
+## Roadmap / Future Tasks
 
 - [ ] Wallet + encryption seed
 - [ ] cancel_all_order
 - [x] setprice
 - [ ] buy
-- [ ] sell  
+- [ ] sell
 - [x] my_recent_swaps
 - [x] my_orders
 - [x] prompt use DB desktop
-- [x] cancel (if i want to cancel by UUID)
-- [x] update_maker_order (want to track UUID)
+- [x] cancel (UUID support)
+- [x] update_maker_order (track UUID)
 - [x] gecko price service
 - [x] paprika price service
 - [x] binance websocket service
 - [x] add total in my_balance_all
-- [x] add am_i_seed in MM2.json if user wants it  
+- [x] add am_i_seed in `MM2.json`
 - [x] get_binance_supported_pairs
-- [x] add a way to start mm2 without extra services
-- [x] generic price service that use in order (binance, gecko, paprika)
-- [x] simple bot cfg
+- [x] start mm2 without extra services
+- [x] generic price service (Binance, Gecko, Paprika)
+- [x] simple bot cfg template
 
-## How to use the trading bot on linux:
+---
 
-```
+## Local Quick Start (Linux)
+
+```bash
 wget https://golang.org/dl/go1.16.5.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.16.5.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
@@ -37,15 +49,14 @@ cp assets/simple_market_bot.template.json mm2/simple_market_bot.json
 ./mm2_client
 
 > help
-> init # you need to do only the first time
+> init                      # run once to bootstrap mm2
 > start
 > enable_active_coins
-> enable COIN_FROM_CFG COIN_2_FROM_CFG # use that if they are not enable yet - you can use active coins next run
-> get_binance_supported_pairs COIN_FROM_CFG # you can see if your coin is supported
+> enable COIN_A COIN_B      # enable individual coins if still inactive
+> get_binance_supported_pairs COIN_A
 
-# Be sure your balance is funded before starting the bot
+# Fund balances before starting the bot
 > start_simple_market_maker_bot
-
 > my_orders
 
 # later
@@ -57,9 +68,11 @@ cp assets/simple_market_bot.template.json mm2/simple_market_bot.json
 tail -f ~/.atomicdex_cli/logs/mm2.client.log
 ```
 
-### How to use the simple market maker bot with an existing atomicdex instance
+---
 
-```
+## Simple Market Maker over an Existing AtomicDEX Daemon
+
+```bash
 go build -o mm2_tools_server_bin cmd/mm2_tools_server/mm2_tools_server.go
 ./mm2_tools_server_bin
 
@@ -78,24 +91,22 @@ curl --location --request POST 'localhost:13579/api/v1/start_simple_market_maker
 curl --location --request POST 'localhost:13579/api/v1/stop_simple_market_maker_bot'
 ```
 
-### How to use the server on Ios
+---
 
-#### building
+## Mobile Bindings
 
-```
+### iOS
+
+Build the framework:
+
+```bash
 cd mm2_tools_server
 gomobile bind -v --target=ios .
 ```
 
-#### using in an ios project:
-```obj-c
-//
-//  main.m
-//  FooBar
-//
-//  Created by Sztergbaum Roman on 15/07/2021.
-//
+Use it in Objective-C:
 
+```obj-c
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "Mm2_tools_server.h"
@@ -103,94 +114,89 @@ gomobile bind -v --target=ios .
 int main(int argc, char * argv[]) {
     NSString * appDelegateClassName;
     @autoreleasepool {
-        // Setup code that might create autoreleased objects goes here.
         appDelegateClassName = NSStringFromClass([AppDelegate class]);
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         Mm2_tools_serverLaunchServer(@"atomic_dex");
-
     });
-
     return UIApplicationMain(argc, argv, nil, appDelegateClassName);
 }
 ```
 
-### using in an android project:
+### Android
 
-#### building
+Generate the AAR:
 
-```
+```bash
 cd mm2_tools_server
 gomobile bind -v --target=android .
 ```
 
-#### Using in an android-studio (kotlin) project:
+Consume it from Kotlin:
 
 ```kt
 import mm2_tools_server.Mm2_tools_server
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
-
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
             )
         )
 
-        thread {
-            Mm2_tools_server.launchServer("atomicDex")
-        }
-        //print("hello world\n")
+        thread { Mm2_tools_server.launchServer("atomicDex") }
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
 }
 ```
 
-#### miscs
+Misc:
+
 ```
-#you may want for testing purpose to forward localhost port of the server
-# for android simulator devices please start the emulator and run then start your app
+# for Android emulators you can forward the local port:
 adb forward tcp:1313 tcp:1313
 ```
 
+---
 
-#### Adding your API keys
+## API Keys & Environment
 
-API keys are populated in `constants/constants.go` and are used to fetch prices from external services from your local environment. 
-Make sure to add these to your environment variables before running the server (either via .bashrc or systemd service files).
+API keys used by `constants/constants.go` feed the price service. Export them
+before launching the server or include them via systemd `EnvironmentFile`.
+
 ```
 LCW_API_KEY=
 GECKO_API_KEY=
 PAPRIKA_API_KEY=
 ```
 
+---
 
+## Build Only the Price Service
 
-#### Building price service only
-
-
-```
+```bash
 go build -o prices_komodo_earth cmd/mm2_tools_server/mm2_tools_server.go
 ./prices_komodo_earth
 ```
 
-#### Using systemd service
-```
+Set `-only_price_service=true` to disable the CLI features.
+
+---
+
+## Example Systemd Service
+
+```ini
 [Unit]
 Description=prices-komodo-earth
 After=multi-user.target
@@ -199,38 +205,47 @@ StartLimitIntervalSec=60
 StartLimitBurst=5
 
 [Service]
-# API Keys
 Environment="LCW_API_KEY=<YOUR_LCW_API_KEY>"
-
-# Path to service binary.
 WorkingDirectory=/home/admin/mm2-client
 ExecStart=/home/admin/mm2-client/prices_komodo_earth -only_price_service=true
-
-# Logs path
 StandardOutput=append:/home/admin/logs/prices-komodo-earth.log
 StandardError=append:/home/admin/logs/prices-komodo-earth.log
-
 User=admin
 Group=admin
 Type=simple
 TimeoutStopSec=30min
 Restart=on-failure
 RestartSec=10s
-
 StandardInput=tty-force
 
 [Install]
 WantedBy=multi-user.target
-
 ```
 
-#### Updating coins file via sudo cronjob
+For a hardened, end-to-end deployment checklist see
+`docs/production-deployment.md`.
 
-Set script to run daily via root's cronjob to update coins file and restart service
-```
+---
+
+## Automating Coins Updates
+
+Run the provided script daily (root cron) to fetch the upstream coins list,
+rebuild the price service binary, and restart the daemon.
+
+```bash
 #!/bin/bash
 curl https://raw.githubusercontent.com/KomodoPlatform/coins/master/utils/coins_config.json -o /home/admin/mm2-client/coins_config.json
 go build -o /home/admin/mm2-client/prices_komodo_earth /home/admin/mm2-client/cmd/mm2_tools_server/mm2_tools_server.go
 systemctl restart prices-komodo-earth
 ```
+
+Adjust paths and add logging to taste.
+
+---
+
+## Additional Documentation
+
+- `MarketMaking.md` – detailed explanation of the market maker configuration.
+- `docs/production-deployment.md` – full production deployment guide (systemd,
+  cron, backups, hardening).
 
