@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FOLDER="/home/admin/mm2-client"
+FOLDER="/home/tech/mm2-client"
 rm ${FOLDER}/coins
 wget -P ${FOLDER} https://raw.githubusercontent.com/GLEECBTC/coins/master/coins
 

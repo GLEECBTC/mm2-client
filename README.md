@@ -206,10 +206,10 @@ StartLimitBurst=5
 
 [Service]
 Environment="LCW_API_KEY=<YOUR_LCW_API_KEY>"
-WorkingDirectory=/home/admin/mm2-client
-ExecStart=/home/admin/mm2-client/prices_komodo_earth -only_price_service=true
-StandardOutput=append:/home/admin/logs/prices-komodo-earth.log
-StandardError=append:/home/admin/logs/prices-komodo-earth.log
+WorkingDirectory=/home/tech/mm2-client
+ExecStart=/home/tech/mm2-client/prices_komodo_earth -only_price_service=true
+StandardOutput=append:/home/tech/logs/prices-komodo-earth.log
+StandardError=append:/home/tech/logs/prices-komodo-earth.log
 User=admin
 Group=admin
 Type=simple
@@ -234,8 +234,8 @@ rebuild the price service binary, and restart the daemon.
 
 ```bash
 #!/bin/bash
-curl https://raw.githubusercontent.com/GLEECBTC/coins/master/utils/coins_config.json -o /home/admin/mm2-client/coins_config.json
-go build -o /home/admin/mm2-client/prices_komodo_earth /home/admin/mm2-client/cmd/mm2_tools_server/mm2_tools_server.go
+curl https://raw.githubusercontent.com/GLEECBTC/coins/master/utils/coins_config.json -o /home/tech/mm2-client/coins_config.json
+go build -o /home/tech/mm2-client/prices_komodo_earth /home/tech/mm2-client/cmd/mm2_tools_server/mm2_tools_server.go
 systemctl restart prices-komodo-earth
 ```
 
