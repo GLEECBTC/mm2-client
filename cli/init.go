@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-const targetCoinsUrl = "https://raw.githubusercontent.com/KomodoPlatform/coins/master/coins"
+const targetCoinsUrl = "https://raw.githubusercontent.com/GLEECBTC/coins/master/coins"
 
 func downloadCoinsFile(filePath string) {
 	_, _ = emoji.Printf("Downloading coins file %s :arrows_counterclockwise:\n", targetCoinsUrl)
@@ -100,7 +100,7 @@ func processVersionConfiguration() {
 	version := mm2http.GetLastDesktopVersion()
 	targetDir := helpers.GetWorkingDir() + "/mm2"
 	targetPath := targetDir + "/coins_config.json"
-	targetUrl := "https://raw.githubusercontent.com/KomodoPlatform/coins/master/utils/coins_config.json"
+	targetUrl := "https://raw.githubusercontent.com/GLEECBTC/coins/master/utils/coins_config.json"
 	if !helpers.FileExists(targetPath) {
 		helpers.PrintCheck("Checking if desktop coins json is present", false)
 		emoji.Printf("Downloading now %s :recycle:\n", targetUrl)

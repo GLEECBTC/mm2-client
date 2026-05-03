@@ -234,7 +234,7 @@ rebuild the price service binary, and restart the daemon.
 
 ```bash
 #!/bin/bash
-curl https://raw.githubusercontent.com/KomodoPlatform/coins/master/utils/coins_config.json -o /home/admin/mm2-client/coins_config.json
+curl https://raw.githubusercontent.com/GLEECBTC/coins/master/utils/coins_config.json -o /home/admin/mm2-client/coins_config.json
 go build -o /home/admin/mm2-client/prices_komodo_earth /home/admin/mm2-client/cmd/mm2_tools_server/mm2_tools_server.go
 systemctl restart prices-komodo-earth
 ```

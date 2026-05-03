@@ -11,7 +11,7 @@ r = requests.get('https://api.coinpaprika.com/v1/tickers').json()
 
 returned_paprika_ids = set([i["id"] for i in r])
 
-r = requests.get('https://raw.githubusercontent.com/KomodoPlatform/coins/master/utils/coins_config.json').json()
+r = requests.get('https://raw.githubusercontent.com/GLEECBTC/coins/master/utils/coins_config.json').json()
 
 coins_repo_ids = set([r[i]["coinpaprika_id"] for i in r if i in no_prices])
 
