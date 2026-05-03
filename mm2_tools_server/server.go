@@ -2,12 +2,15 @@ package mm2_tools_server
 
 import (
 	"fmt"
+	"os"
+	"runtime"
+	"strconv"
+
 	"github.com/kpango/glg"
 	"github.com/ulule/limiter/v3"
 	mfasthttp "github.com/ulule/limiter/v3/drivers/middleware/fasthttp"
 	"github.com/ulule/limiter/v3/drivers/store/memory"
 	"github.com/valyala/fasthttp"
-	"runtime"
 )
 
 var gAppName = ""
@@ -38,5 +41,17 @@ func LaunchServer(appName string, onlyPriceService bool) {
 	middleware := mfasthttp.NewMiddleware(limiter.New(store, rate, limiter.WithTrustForwardHeader(true)))
 	glg.Info("Middleware created")
 
-    glg.Fatal(fasthttp.ListenAndServe(":"+fmt.Sprintf("%d", 13579), middleware.Handle(router.Handler)))
+	port := 13579
+	if p := os.Getenv("API_PORT"); p != "" {
+		if v, err := strconv.Atoi(p); err == nil {
+			port = v
+		}
+	}
+	host := os.Getenv("API_HOST")
+	if host == "" {
+		host = "0.0.0.0"
+	}
+	addr := fmt.Sprintf("%s:%d", host, port)
+	glg.Infof("Listening on %s", addr)
+	glg.Fatal(fasthttp.ListenAndServe(addr, middleware.Handle(router.Handler)))
 }
