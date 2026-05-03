@@ -186,8 +186,8 @@ PAPRIKA_API_KEY=
 ## Build Only the Price Service
 
 ```bash
-go build -o prices_komodo_earth cmd/mm2_tools_server/mm2_tools_server.go
-./prices_komodo_earth
+go build -o mm2_tools_server_bin cmd/mm2_tools_server/mm2_tools_server.go
+./mm2_tools_server_bin
 ```
 
 Set `-only_price_service=true` to disable the CLI features.
@@ -198,7 +198,7 @@ Set `-only_price_service=true` to disable the CLI features.
 
 ```ini
 [Unit]
-Description=prices-komodo-earth
+Description=prices-gleec-com
 After=multi-user.target
 Conflicts=getty@tty1.service
 StartLimitIntervalSec=60
@@ -207,9 +207,9 @@ StartLimitBurst=5
 [Service]
 Environment="LCW_API_KEY=<YOUR_LCW_API_KEY>"
 WorkingDirectory=/home/tech/mm2-client
-ExecStart=/home/tech/mm2-client/prices_komodo_earth -only_price_service=true
-StandardOutput=append:/home/tech/logs/prices-komodo-earth.log
-StandardError=append:/home/tech/logs/prices-komodo-earth.log
+ExecStart=/home/tech/mm2-client/mm2_tools_server_bin -only_price_service=true
+StandardOutput=append:/home/tech/logs/prices-gleec-com.log
+StandardError=append:/home/tech/logs/prices-gleec-com.log
 User=admin
 Group=admin
 Type=simple
@@ -235,8 +235,8 @@ rebuild the price service binary, and restart the daemon.
 ```bash
 #!/bin/bash
 curl https://raw.githubusercontent.com/GLEECBTC/coins/master/utils/coins_config.json -o /home/tech/mm2-client/coins_config.json
-go build -o /home/tech/mm2-client/prices_komodo_earth /home/tech/mm2-client/cmd/mm2_tools_server/mm2_tools_server.go
-systemctl restart prices-komodo-earth
+go build -o /home/tech/mm2-client/mm2_tools_server_bin /home/tech/mm2-client/cmd/mm2_tools_server/mm2_tools_server.go
+systemctl restart prices-gleec-com
 ```
 
 Adjust paths and add logging to taste.

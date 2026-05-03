@@ -18,9 +18,9 @@ if [[ "$data" -eq 1 ]]; then
     ${FOLDER}/coins_config.json.bk ${FOLDER}/coins_config.json
 fi
 # Rebuild service
-/usr/local/go/bin/go build -o ${FOLDER}/prices_komodo_earth ${FOLDER}/cmd/mm2_tools_server/mm2_tools_server.go
+/usr/local/go/bin/go build -o ${FOLDER}/mm2_tools_server_bin ${FOLDER}/cmd/mm2_tools_server/mm2_tools_server.go
 # restart service
-/bin/systemctl restart prices-komodo-earth
+/bin/systemctl restart prices-gleec-com
 # Print date for logs
 now=$(date +%m-%d-%Y)
 echo "prices updated at ${now}"

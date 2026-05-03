@@ -145,7 +145,7 @@ tail -f ~/.atomicdex_cli/logs/mm2.client.log
 
 ## 7. Price Service as a Systemd Unit
 
-Create `/etc/systemd/system/prices-komodo-earth.service`:
+Create `/etc/systemd/system/prices-gleec-com.service`:
 
 ```ini
 [Unit]
@@ -173,7 +173,7 @@ Then enable and start it:
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable --now prices-komodo-earth.service
+sudo systemctl enable --now prices-gleec-com.service
 ```
 
 Health check endpoint:
@@ -207,7 +207,7 @@ This script:
 
 ## 9. Logging and Observability
 
-- `journalctl -u prices-komodo-earth -f` – follow service logs.
+- `journalctl -u prices-gleec-com -f` – follow service logs.
 - `/var/log/mm2-client/prices.log` – consolidated stdout/stderr.
 - `~/.atomicdex_cli/logs/mm2.client.log` – CLI bot activity.
 - Add logrotate entries for the log directory if retention is required.
@@ -246,7 +246,7 @@ vault. Verify restores quarterly.
 
 | Symptom | Action |
 |---------|--------|
-| Service stuck in restart loop | `journalctl -u prices-komodo-earth` for stack traces; ensure API keys are present. |
+| Service stuck in restart loop | `journalctl -u prices-gleec-com` for stack traces; ensure API keys are present. |
 | Missing coins/pairs | Re-run `enable COIN`; inspect `/opt/mm2-client/coins_config.json`. |
 | Price endpoint stale | Check network connectivity to upstream providers, confirm cron updates succeeded. |
 | CLI cannot connect to mm2 | Run `> start` again or restart underlying mm2 daemon; ensure ports 7783/1313 are free. |
